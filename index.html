@@ -3,105 +3,196 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Conversor</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Merriweather:ital,wght@1,900&family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap"
-            rel="stylesheet">
+        <meta name="viewport" content="width=
+
+
+            , initial-scale=1.0">
+        <title>Document</title>
     </head>
     <style>
-        .titulo,
-        .input-box,
-        .output-pai,
-        .upload {
-            display: flex;
-            justify-content: center;
-            font-family: 'Roboto', sans-serif;
-        }
-        .upload {
-            text-align: center;
-        }
-        .input img,
-        .output img {
-            width: 300px;
+        body {
+  padding: 20px;
+  font-family: sans-serif;
+}
+h1 {
+  margin-top: 0;
+}
+input[type=file] {
+  margin: 20px 0;
+}
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+.dropTarget {
+  position: relative;
+  border: 3px dashed silver;
+  flex-basis: auto;
+  flex-grow: 20;
+}
+.dropTarget::before {
+  content: 'Drop files here';
+  color: silver;
+  font-size: 5vh;
+  height: 5vh;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+#previews > div {
+    box-sizing: border-box;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    overflow: hidden;
+    padding: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: top;
+}
+#previews > div > progress {
+  width: 80%;
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+  height: calc(100vh - 40px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-        }
-        #btn {
-            margin: 0 auto;
-    width: max-content;
-    display: block;
-    margin-top: 30px;        }
-      
     </style>
     <body>
-        <div class="titulo">
-            <h1>Convert images to webp</h1>
-        </div>
-        <div class="upload">
-            <h2>Upload your image!</h2>
-        </div>
-        <div class="input-box">
-            <input type="file" accept="image/*" name="convert" id="userImage"
-                onchange="convertImage(event)">
-        </div>
-
-        <div class="output-pai">
-
-            <div class="output">
-                <img src="" id="WImage" alt="">
+        <div class="layout">
+            <h1>Conversor WEBP </h1>
+            <div>
+                <input type="file" multiple accept="image/*">
             </div>
+            <div id="previews"></div>
+            <div class="dropTarget"></div>
         </div>
 
         <script>
+            let refs = {};
+refs.imagePreviews = document.querySelector('#previews');
+refs.fileSelector = document.querySelector('input[type=file]');
 
-        const WImage = document.getElementById("WImage");
-        function convertImage(event) {
-            console.log("oi")
-            if (event) { 
-                //Mostra imagem
-                var src = URL.createObjectURL(event.target.files[0]);
+function addImageBox(container) {
+  let imageBox = document.createElement("div");
+  let progressBox = document.createElement("progress");
+  imageBox.appendChild(progressBox);
+  container.appendChild(imageBox);
+  
+  return imageBox;
+}
 
-                //Cria um canvas
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext("2d");
+function processFile(file) {
+  if (!file) {
+    return;
+  }
+  console.log(file);
 
-                var userImage = new Image();
-                userImage.src = src;
+  let imageBox = addImageBox(refs.imagePreviews);
 
-                userImage.onload = function() {
-                    canvas.width = userImage.width;
-                    canvas.height = userImage.height;
-                    context.drawImage(userImage, 0, 0);
+  // Load the data into an image
+  new Promise(function (resolve, reject) {
+    let rawImage = new Image();
 
-                    //Converte pra Webp
-                    var webpImage = canvas.toDataURL("image/webp");
-                    WImage.src = webpImage;
+    rawImage.addEventListener("load", function () {
+      resolve(rawImage);
+    });
 
-                   
+    rawImage.src = URL.createObjectURL(file);
+  })
+  .then(function (rawImage) {
+    // Convert image to webp ObjectURL via a canvas blob
+    return new Promise(function (resolve, reject) {
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext("2d");
 
-                    //nomeia o arquivo
-                    var file = event.target.files[0];
-                    var fileName = file.name;
-                    var fileNameFormated = fileName.substring(0, fileName.lastIndexOf("."));
+      canvas.width = rawImage.width;
+      canvas.height = rawImage.height;
+      ctx.drawImage(rawImage, 0, 0);
 
+      canvas.toBlob(function (blob) {
+        resolve(URL.createObjectURL(blob));
+      }, "image/webp");
+    });
+  })
+  .then(function (imageURL) {
+    // Load image for display on the page
+    return new Promise(function (resolve, reject) {
+      let scaledImg = new Image();
 
-                    //faz o download
-                    var downloadButton = document.createElement("a");
-                    downloadButton.setAttribute("id", "btn")
-                    downloadButton.href = webpImage;
-                    downloadButton.download = fileNameFormated + ".webp";
-                    downloadButton.innerHTML = "Download WebP Image";
-                    document.body.appendChild(downloadButton);
+      scaledImg.addEventListener("load", function () {
+        resolve({imageURL, scaledImg});
+      });
 
+      scaledImg.setAttribute("src", imageURL);
+    });
+  })
+  .then(function (data) {
+    // Inject into the DOM
+    let imageLink = document.createElement("a");
 
+    imageLink.setAttribute("href", data.imageURL);
+    var fileName = file.name;
+    var fileNameFormated = fileName.substring(0, fileName.lastIndexOf("."));
 
+    imageLink.setAttribute('download', `${fileNameFormated}.webp`);
+    imageLink.appendChild(data.scaledImg);
 
-                }
-            }
-        }
+    imageBox.innerHTML = "";
+    imageBox.appendChild(imageLink);
+  });
+}
 
-</script>
+function processFiles(files) {
+  for (let file of files) {
+    processFile(file);
+  }
+}
+
+function fileSelectorChanged() {
+  processFiles(refs.fileSelector.files);
+  refs.fileSelector.value = "";
+}
+
+refs.fileSelector.addEventListener("change", fileSelectorChanged);
+
+// Drag And Drop
+function dragenter(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+function dragover(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+function drop(callback, e) {
+  e.stopPropagation();
+  e.preventDefault();
+  callback(e.dataTransfer.files);
+}
+
+function setDragDrop(area, callback) {
+  area.addEventListener("dragenter", dragenter, false);
+  area.addEventListener("dragover", dragover, false);
+  area.addEventListener("drop", function (e) { drop(callback, e); }, false);
+}
+setDragDrop(document.documentElement, processFiles);
+        </script>
     </body>
 </html>
