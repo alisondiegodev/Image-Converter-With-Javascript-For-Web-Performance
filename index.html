@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
 
 
-            , initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <style>
+      , initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <style>
         body {
   padding: 20px;
   font-family: sans-serif;
@@ -66,23 +66,23 @@ img {
   justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
-  height: calc(100vh - 40px);
+  height: 700px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
     </style>
-    <body>
-        <div class="layout">
-            <h1>Conversor WEBP </h1>
-            <div>
-                <input type="file" multiple accept="image/*">
-            </div>
-            <div id="previews"></div>
-            <div class="dropTarget"></div>
-        </div>
+  <body>
+    <div class="layout">
+      <h1>Conversor WEBP </h1>
+      <div>
+        <input type="file" multiple accept="image/*">
+      </div>
+      <div id="previews"></div>
+      <div class="dropTarget"></div>
+    </div>
 
-        <script>
+    <script>
             let refs = {};
 refs.imagePreviews = document.querySelector('#previews');
 refs.fileSelector = document.querySelector('input[type=file]');
@@ -144,6 +144,7 @@ function processFile(file) {
   .then(function (data) {
     // Inject into the DOM
     let imageLink = document.createElement("a");
+    
 
     imageLink.setAttribute("href", data.imageURL);
     var fileName = file.name;
@@ -194,5 +195,5 @@ function setDragDrop(area, callback) {
 }
 setDragDrop(document.documentElement, processFiles);
         </script>
-    </body>
+  </body>
 </html>
