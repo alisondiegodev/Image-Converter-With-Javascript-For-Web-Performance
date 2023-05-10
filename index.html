@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width= ,initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="./icon.webp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width= ,initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="./icon.webp">
 
 
-    <title>Conversor Webp</title>
-  </head>
-  <style>
-        body {
-  padding: 20px;
-  font-family: sans-serif;
-}
-h1 {
-  margin-top: 0;
-}
-input[type=file] {
-  margin: 20px 0;
-}
-img {
-  max-height: 100%;
-  max-width: 100%;
-}
-.dropTarget {
-  position: relative;
-  border: 3px dashed silver;
-  flex-basis: auto;
-  flex-grow: 20;
-}
-.dropTarget::before {
-  content: 'Conversor Aliens 800k';
-  color: silver;
-  font-size: 5vh;
-  height: 5vh;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  text-align: center;
-  pointer-events: none;
-  user-select: none;
-}
-#previews > div {
+  <title>Conversor Webp</title>
+</head>
+<style>
+  body {
+    padding: 20px;
+    font-family: sans-serif;
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+
+  input[type=file] {
+    margin: 20px 0;
+  }
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .dropTarget {
+    position: relative;
+    border: 3px dashed silver;
+    flex-basis: auto;
+    flex-grow: 20;
+  }
+
+  .dropTarget::before {
+    content: 'Conversor Aliens 800k';
+    color: silver;
+    font-size: 5vh;
+    height: 5vh;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  #previews>div {
     box-sizing: border-box;
     height: 150px;
     width: 150px;
@@ -56,217 +63,330 @@ img {
     justify-content: center;
     align-items: center;
     vertical-align: top;
-}
-#previews > div > progress {
-  width: 80%;
-}
-.layout {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
-  height: 700px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.flex-rule {
-  display: flex;
-  justify-content: space-between;
-}
-.download {
+  }
+
+  #previews>div>progress {
+    width: 80%;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    height: 700px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .flex-rule {
+    display: flex;
+    gap: 50px;
+  }
+
+  .download {
     width: 300px;
     height: 80px;
     border-radius: 20px;
     border: .5px solid gray;
-    background: linear-gradient(90deg,#f1f1f1 ,#fbfbfb,#ebeaea);
+    background: linear-gradient(90deg, #f1f1f1, #fbfbfb, #ebeaea);
     filter: drop-shadow(0px 0px 1px #999);
     font-size: 22px;
     font-weight: 600;
     cursor: pointer;
-}
-.download:hover, 
-.limpar:hover {
-  /* background: linear-gradient(90deg,#e9e9e9 ,#eeeded,#e2e1e1); */
-  filter: drop-shadow(0px 0px 3px #999);
+  }
+
+  .download:hover,
+  .limpar:hover {
+    /* background: linear-gradient(90deg,#e9e9e9 ,#eeeded,#e2e1e1); */
+    filter: drop-shadow(0px 0px 3px #999);
 
 
-}
-#output {
-  width: 200px;
-  margin-top: -10px;
-}
-.selectedOutput {
-  text-transform: uppercase;
-}
-.limpar{
-  width: 200px;
-  height: 40px;
-  background: linear-gradient(90deg,#f1f1f1 ,#fbfbfb,#ebeaea);
+  }
 
-  border-radius: 10px;
-  border: 0.5px solid #999;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
+  #output {
+    width: 200px;
+    margin-top: -10px;
+  }
 
-    </style>
-  <body>
-    <div class="layout">
-      <div class="flex-rule">
-        <h1>Conversor <span class="selectedOutput">Webp</span></h1>
-        <button class="download">Download All</button>
+  .selectedOutput {
+    text-transform: uppercase;
+  }
+
+  .limpar {
+    width: 200px;
+    height: 40px;
+    background: linear-gradient(90deg, #f1f1f1, #fbfbfb, #ebeaea);
+
+    border-radius: 10px;
+    border: 0.5px solid #999;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  #quality {
+    max-width: 200px;
+    margin-top: 5px;
+  }
+
+  .flex-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: -20px;
+  }
+
+  .quality-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+  }
+</style>
+
+<body>
+  <div class="layout">
+    <div class="flex-rule">
+      <h1>Conversor <span class="selectedOutput">Webp</span></h1>
+      <button class="download">Download All</button>
+      <div style="display: flex; flex-direction: column;justify-content: center; align-items: center;">
+        <button onclick="armazenarImagens()" class="downloadZip download">Zip File Download</button>
+        <p style="margin-top: 5px; font-size: 14px;"><i>Para grande quantidade de imagens</i></p>
       </div>
+    </div>
+    <div class="flex-content">
       <p>Formato de saida:</p>
       <select id="output">
         <option value="webp">WEBP</option>
         <option value="png">PNG</option>
         <option value="jpeg">JPEG</option>
       </select>
+
+      <label style="margin-top: 10px;" for="quality">Qualidade:</label>
+      <input type="range" id="quality" min="0" max="1" step="0.1" value="0.9">
+      <div class="quality-div">
+        <p style="margin-top: 5px; font-size: 11px;"><i>Menor Tamanho</i></p>
+        <p style="margin-top: 5px; font-size: 11px;"><i>Maior Qualidade</i></p>
+
+      </div>
+
       <div>
         <input type="file" multiple accept="image/*">
       </div>
       <button class="limpar">Limpar Tudo</button>
-      <div id="previews"></div>
-      <div class="dropTarget"></div>
     </div>
+    <div id="previews"></div>
+    <div class="dropTarget"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 
-    <script>
+  <script>
 
-      //function to download every image loaded
-      botaoDownload = document.querySelector(".download");
+    // FUNÇÃO QUALIDADE
+    let qualityInput = document.querySelector("#quality");
 
-      botaoDownload.addEventListener("click", () => {
-        let converted = document.querySelectorAll("a");
-        converted.forEach((item) => { item.click()})
+
+    // FUNÇÃO ZIP
+    function armazenarImagens() {
+      var zip = new JSZip();
+
+      // Obtém todos os elementos <a> na página
+      var links = document.querySelectorAll('a');
+
+      // Função auxiliar para adicionar uma imagem ao arquivo ZIP
+      function adicionarImagemAoZip(link) {
+        return new Promise(function (resolve, reject) {
+          var href = link.href;
+          var filename = link.download;
+
+          // Faz a busca da imagem como Blob
+          fetch(href)
+            .then(response => response.blob())
+            .then(blob => {
+              // Adiciona o Blob ao arquivo ZIP
+              zip.file(filename, blob);
+              resolve();
+            })
+            .catch(reject);
+        });
+      }
+
+      // Array de promessas de busca das imagens
+      var promises = [];
+
+      // Percorre os links e adiciona as promessas de busca ao array
+      for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+
+        // Adiciona a promessa ao array
+        promises.push(adicionarImagemAoZip(link));
+      }
+
+      // Aguarda todas as promessas serem resolvidas
+      Promise.all(promises)
+        .then(function () {
+          // Gera o arquivo ZIP
+          zip.generateAsync({ type: "blob" })
+            .then(function (blob) {
+              // Cria um link de download para o arquivo ZIP e dispara o clique programaticamente
+              var link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = "imagens.zip";
+              link.style.display = "none";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            });
+        })
+        .catch(function (error) {
+          console.error("Erro ao armazenar as imagens:", error);
+        });
+    }
+
+
+    //BOTAO DOWNLOAD ALL
+    botaoDownload = document.querySelector(".download");
+
+    botaoDownload.addEventListener("click", () => {
+      let converted = document.querySelectorAll("a");
+      converted.forEach((item) => { item.click() })
+    })
+    let formatOutput = "webp";
+    let option = document.querySelector("#output");
+    let titleType = document.querySelector(".selectedOutput");
+    let clear = document.querySelector(".limpar");
+
+
+    option.addEventListener("change", () => {
+      formatOutput = option.value;
+      titleType.innerHTML = formatOutput;
+
+    })
+
+    clear.addEventListener("click", () => {
+      let converted = document.querySelectorAll("a");
+      converted.forEach((item) => { item.parentElement.remove() })
+    })
+
+
+    let refs = {};
+    refs.imagePreviews = document.querySelector('#previews');
+    refs.fileSelector = document.querySelector('input[type=file]');
+
+    function addImageBox(container) {
+      let imageBox = document.createElement("div");
+      let progressBox = document.createElement("progress");
+      imageBox.appendChild(progressBox);
+      container.appendChild(imageBox);
+      return imageBox;
+    }
+    function processFile(file) {
+      if (!file) {
+        return;
+      }
+
+      let imageBox = addImageBox(refs.imagePreviews);
+
+      // Load the data into an image
+      new Promise(function (resolve, reject) {
+        let rawImage = new Image();
+
+        rawImage.addEventListener("load", function () {
+          resolve(rawImage);
+        });
+
+        rawImage.src = URL.createObjectURL(file);
       })
-      let formatOutput = "webp";
-      let option = document.querySelector("#output");
-      let titleType = document.querySelector(".selectedOutput");
-      let clear = document.querySelector(".limpar");
+        .then(function (rawImage) {
+          // Convert image to webp ObjectURL via canvas blob
+          return new Promise(function (resolve, reject) {
+            // Obter o valor de qualidade selecionado pelo usuário
+            let quality = parseFloat(qualityInput.value);
+
+            // Redimensionar o canvas com base na qualidade
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext("2d");
+            canvas.width = rawImage.width;
+            canvas.height = rawImage.height;
+
+            // Desenhar a imagem no canvas
+            ctx.drawImage(rawImage, 0, 0);
+
+            // Converter a imagem para blob com a qualidade desejada
+            canvas.toBlob(function (blob) {
+              resolve(URL.createObjectURL(blob));
+            }, `image/${formatOutput}`, quality);
+          });
+        })
+        .then(function (imageURL) {
+          // Load image for display on the page
+          return new Promise(function (resolve, reject) {
+            let scaledImg = new Image();
+
+            scaledImg.addEventListener("load", function () {
+              resolve({ imageURL, scaledImg });
+            });
+
+            scaledImg.setAttribute("src", imageURL);
+          });
+        })
+        .then(function (data) {
+          // Inject into the DOM
+          let imageLink = document.createElement("a");
+
+          imageLink.setAttribute("href", data.imageURL);
+          var fileName = file.name;
+          var fileNameFormated = fileName.substring(0, fileName.lastIndexOf("."));
+
+          imageLink.setAttribute('download', `${fileNameFormated}.${formatOutput}`);
+          imageLink.appendChild(data.scaledImg);
+
+          imageBox.innerHTML = "";
+          imageBox.appendChild(imageLink);
+        });
+    }
 
 
-      option.addEventListener("change", () => {
-        formatOutput = option.value;
-        titleType.innerHTML = formatOutput;
-
-      })
-
-      clear.addEventListener("click", () => {
-        let converted = document.querySelectorAll("a");
-        converted.forEach((item) => { item.parentElement.remove()})
-      })
 
 
-            let refs = {};
-refs.imagePreviews = document.querySelector('#previews');
-refs.fileSelector = document.querySelector('input[type=file]');
+    function processFiles(files) {
+      for (let file of files) {
+        processFile(file);
+      }
+    }
 
-function addImageBox(container) {
-  let imageBox = document.createElement("div");
-  let progressBox = document.createElement("progress");
-  imageBox.appendChild(progressBox);
-  container.appendChild(imageBox);
-  return imageBox;
-}
+    function fileSelectorChanged() {
+      processFiles(refs.fileSelector.files);
+      refs.fileSelector.value = "";
+    }
 
-function processFile(file) {
-  if (!file) {
-    return;
-  }
+    refs.fileSelector.addEventListener("change", fileSelectorChanged);
 
-  let imageBox = addImageBox(refs.imagePreviews);
+    // Drag And Drop
+    function dragenter(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
 
-  // Load the data into an image
-  new Promise(function (resolve, reject) {
-    let rawImage = new Image();
+    function dragover(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
 
-    rawImage.addEventListener("load", function () {
-      resolve(rawImage);
-    });
+    function drop(callback, e) {
+      e.stopPropagation();
+      e.preventDefault();
+      callback(e.dataTransfer.files);
+    }
 
-    rawImage.src = URL.createObjectURL(file);
-  })
-  .then(function (rawImage) {
-    // Convert image to webp ObjectURL via canvas blob
-    return new Promise(function (resolve, reject) {
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext("2d");
+    function setDragDrop(area, callback) {
+      area.addEventListener("dragenter", dragenter, false);
+      area.addEventListener("dragover", dragover, false);
+      area.addEventListener("drop", function (e) { drop(callback, e); }, false);
+    }
+    setDragDrop(document.documentElement, processFiles);
+  </script>
+</body>
 
-      canvas.width = rawImage.width;
-      canvas.height = rawImage.height;
-      ctx.drawImage(rawImage, 0, 0);
-
-      canvas.toBlob(function (blob) {
-        resolve(URL.createObjectURL(blob));
-      }, `image/${formatOutput}`);
-    });
-  })
-  .then(function (imageURL) {
-    // Load image for display on the page
-    return new Promise(function (resolve, reject) {
-      let scaledImg = new Image();
-
-      scaledImg.addEventListener("load", function () {
-        resolve({imageURL, scaledImg});
-      });
-
-      scaledImg.setAttribute("src", imageURL);
-    });
-  })
-  .then(function (data) {
-    // Inject into the DOM
-    let imageLink = document.createElement("a");
-    
-
-    imageLink.setAttribute("href", data.imageURL);
-    var fileName = file.name;
-    var fileNameFormated = fileName.substring(0, fileName.lastIndexOf("."));
-
-    imageLink.setAttribute('download', `${fileNameFormated}.${formatOutput}`);
-    imageLink.appendChild(data.scaledImg);
-
-    imageBox.innerHTML = "";
-    imageBox.appendChild(imageLink);
-  });
-}
-
-function processFiles(files) {
-  for (let file of files) {
-    processFile(file);
-  }
-}
-
-function fileSelectorChanged() {
-  processFiles(refs.fileSelector.files);
-  refs.fileSelector.value = "";
-}
-
-refs.fileSelector.addEventListener("change", fileSelectorChanged);
-
-// Drag And Drop
-function dragenter(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
-
-function dragover(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
-
-function drop(callback, e) {
-  e.stopPropagation();
-  e.preventDefault();
-  callback(e.dataTransfer.files);
-}
-
-function setDragDrop(area, callback) {
-  area.addEventListener("dragenter", dragenter, false);
-  area.addEventListener("dragover", dragover, false);
-  area.addEventListener("drop", function (e) { drop(callback, e); }, false);
-}
-setDragDrop(document.documentElement, processFiles);
-        </script>
-  </body>
 </html>
