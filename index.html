@@ -86,8 +86,8 @@
   }
 
   .download {
-    width: 300px;
-    height: 80px;
+    width: 230px;
+    height: 49px;
     border-radius: 20px;
     border: .5px solid gray;
     background: linear-gradient(90deg, #f1f1f1, #fbfbfb, #ebeaea);
@@ -133,8 +133,11 @@
   .flex-content {
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    margin-top: -20px;
+    align-items: center;
+    flex-direction: row;
+    gap: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .quality-div {
@@ -143,6 +146,43 @@
     justify-content: space-between;
     width: 200px;
   }
+
+  .resize-label {
+    font-size: 14px;
+  }
+
+  .resize-p {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .resize,
+  .limit {
+    width: 200px;
+    margin-top: 10px;
+  }
+
+  .resize-value {
+    padding-left: 5px;
+  }
+
+  .resize-div {
+    display: none;
+    flex-direction: column;
+
+  }
+
+  #btn-resize {
+    width: 120px;
+
+  }
+
+  .resize-div input {
+    box-shadow: 0px 0px 6px -2px gray;
+    border-radius: 8px;
+    padding: 5px;
+    font-size: 15px;
+  }
 </style>
 
 <body>
@@ -150,31 +190,46 @@
     <div class="flex-rule">
       <h1>Conversor <span class="selectedOutput">Webp</span></h1>
       <button class="download">Download All</button>
+
       <div style="display: flex; flex-direction: column;justify-content: center; align-items: center;">
         <button onclick="armazenarImagens()" class="downloadZip download">Zip File Download</button>
-        <p style="margin-top: 5px; font-size: 14px;"><i>Para grande quantidade de imagens</i></p>
+        <p style="margin-top: 5px; font-size: 12px;"><i>Para grande quantidade de imagens</i></p>
       </div>
+      <button class=" download">Limpar Tudo</button>
     </div>
     <div class="flex-content">
-      <p>Formato de saida:</p>
-      <select id="output">
-        <option value="webp">WEBP</option>
-        <option value="png">PNG</option>
-        <option value="jpeg">JPEG</option>
-      </select>
-
-      <label style="margin-top: 10px;" for="quality">Qualidade:</label>
-      <input type="range" id="quality" min="0" max="1" step="0.1" value="0.9">
-      <div class="quality-div">
-        <p style="margin-top: 5px; font-size: 11px;"><i>Menor Tamanho</i></p>
-        <p style="margin-top: 5px; font-size: 11px;"><i>Maior Qualidade</i></p>
-
-      </div>
-
       <div>
-        <input type="file" multiple accept="image/*">
+        <p>Formato de saida:</p>
+        <select id="output">
+          <option value="webp">WEBP</option>
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+        </select>
+        <div>
+          <input type="file" multiple accept="image/*">
+        </div>
       </div>
-      <button class="limpar">Limpar Tudo</button>
+      <div>
+        <label style="margin-top: 10px;" for="quality">Qualidade:</label>
+        <input type="range" id="quality" min="0" max="0.9" step="0.1" value="0.8">
+        <div class="quality-div">
+          <p style="margin-top: 5px; font-size: 11px;"><i>Menor Tamanho</i></p>
+          <p style="margin-top: 5px; font-size: 11px;"><i>Maior Qualidade</i></p>
+
+        </div>
+      </div>
+      <div>
+        <button id="btn-resize" class="limpar">Redimensionar</button>
+        <div class="resize-div">
+          <label class="resize-label" for="resize">Diminuir tamanho em pixels das imagens</label>
+          <input class="resize" id="resize" type="number" min="0" max="2000" step="10" value="0">
+          <p class="resize-p">Reduzir imagens em:<span class="resize-value">0 Pixels</span></p>
+          <label for="limit">Limitar tamanho em width</label>
+          <input class="limit" id="limit" type="number" min="0" max="2000" step="100" value="0">
+        </div>
+      </div>
+
+
     </div>
     <div id="previews"></div>
     <div class="dropTarget"></div>
@@ -182,9 +237,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 
   <script>
-
-    // FUNÇÃO QUALIDADE
     let qualityInput = document.querySelector("#quality");
+
+    let btnResize = document.querySelector("#btn-resize");
+    let resizeDiv = document.querySelector(".resize-div");
+    let limitWidth = document.querySelector(".limit");
+
+    btnResize.addEventListener("click", () => {
+      btnResize.style.display = "none";
+      resizeDiv.style.display = "flex";
+    })
 
 
     // FUNÇÃO ZIP
@@ -281,17 +343,26 @@
       container.appendChild(imageBox);
       return imageBox;
     }
+
+
+    // FUNÇÃO RESIZE
+    let resizeInput = document.querySelector(".resize");
+    let resizeShow = document.querySelector(".resize-value");
+
+    resizeInput.addEventListener("change", () => {
+      resizeShow.innerHTML = resizeInput.value + " Pixels";
+    })
+
+
+    // FUNÇÃO PROCESSAR
     function processFile(file) {
       if (!file) {
         return;
       }
 
       let imageBox = addImageBox(refs.imagePreviews);
-
-      // Load the data into an image
       new Promise(function (resolve, reject) {
         let rawImage = new Image();
-
         rawImage.addEventListener("load", function () {
           resolve(rawImage);
         });
@@ -299,28 +370,49 @@
         rawImage.src = URL.createObjectURL(file);
       })
         .then(function (rawImage) {
-          // Convert image to webp ObjectURL via canvas blob
           return new Promise(function (resolve, reject) {
-            // Obter o valor de qualidade selecionado pelo usuário
             let quality = parseFloat(qualityInput.value);
-
-            // Redimensionar o canvas com base na qualidade
             let canvas = document.createElement('canvas');
             let ctx = canvas.getContext("2d");
-            canvas.width = rawImage.width;
-            canvas.height = rawImage.height;
 
-            // Desenhar a imagem no canvas
-            ctx.drawImage(rawImage, 0, 0);
+            let inputResize = resizeInput.value;
+            let maxWidth = limitWidth.value;
 
-            // Converter a imagem para blob com a qualidade desejada
+            if (maxWidth > 0 && rawImage.width > maxWidth) {
+              let proporcao = maxWidth / rawImage.width;
+              let novaLargura = maxWidth;
+              let novaAltura = rawImage.height * proporcao;
+              canvas.width = novaLargura;
+              canvas.height = novaAltura;
+              ctx.drawImage(rawImage, 0, 0, novaLargura, novaAltura);
+
+            } else {
+
+              let proporcao = (rawImage.width - inputResize) / rawImage.width;
+              let novaLargura = rawImage.width * proporcao;
+              let novaAltura = rawImage.height * proporcao;
+
+              canvas.width = novaLargura;
+              canvas.height = novaAltura;
+
+              ctx.drawImage(rawImage, 0, 0, novaLargura, novaAltura);
+
+              // canvas.width = rawImage.width;
+              // canvas.height = rawImage.height;
+
+              // ctx.drawImage(rawImage, 0, 0);
+            }
+
+
+
+
+
             canvas.toBlob(function (blob) {
               resolve(URL.createObjectURL(blob));
             }, `image/${formatOutput}`, quality);
           });
         })
         .then(function (imageURL) {
-          // Load image for display on the page
           return new Promise(function (resolve, reject) {
             let scaledImg = new Image();
 
