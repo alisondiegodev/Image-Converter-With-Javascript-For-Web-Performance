@@ -1,0 +1,171 @@
+body {
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+input[type=file] {
+    margin: 20px 0;
+}
+
+img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.dropTarget {
+    position: relative;
+    border: 3px dashed silver;
+    flex-basis: auto;
+    flex-grow: 20;
+}
+
+.dropTarget::before {
+    content: 'Solte Imagens Aqui';
+    color: silver;
+    font-size: 5vh;
+    height: 5vh;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+}
+
+#previews>div {
+    box-sizing: border-box;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    overflow: hidden;
+    padding: 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: top;
+}
+
+#previews>div>progress {
+    width: 80%;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    height: 700px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.flex-rule {
+    display: flex;
+    gap: 50px;
+}
+
+.download {
+    width: 230px;
+    height: 49px;
+    border-radius: 20px;
+    border: .5px solid gray;
+    background: linear-gradient(90deg, #f1f1f1, #fbfbfb, #ebeaea);
+    filter: drop-shadow(0px 0px 1px #999);
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.download:hover,
+.limpar:hover {
+    filter: drop-shadow(0px 0px 3px #999);
+
+
+}
+
+#output {
+    width: 200px;
+    margin-top: -10px;
+}
+
+.selectedOutput {
+    text-transform: uppercase;
+}
+
+.limpar {
+    width: 200px;
+    height: 40px;
+    background: linear-gradient(90deg, #f1f1f1, #fbfbfb, #ebeaea);
+
+    border-radius: 10px;
+    border: 0.5px solid #999;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#quality {
+    max-width: 200px;
+    margin-top: 5px;
+}
+
+.flex-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.quality-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+}
+
+.resize-label {
+    font-size: 14px;
+}
+
+.resize-p {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.resize,
+.limit {
+    width: 200px;
+    margin-top: 10px;
+}
+
+.resize-value {
+    padding-left: 5px;
+}
+
+.resize-div {
+    display: none;
+    flex-direction: column;
+
+}
+
+#btn-resize {
+    width: 120px;
+
+}
+
+.resize-div input {
+    box-shadow: 0px 0px 6px -2px gray;
+    border-radius: 8px;
+    padding: 5px;
+    font-size: 15px;
+}
